@@ -1,0 +1,18 @@
+#!/bin/bash
+
+## Extract headings from docx file
+## Version: 1.0 (xslt2)
+## 
+## Usage: 
+##		toc-docx <file>
+##
+## Samples:
+##		     
+if [ "$1" == "-h" -o  "$1" == "--help" -o -t 0 -a "$#" == 0 ]
+then 
+	sed -n "s;^## \?;;p" "${BASH_SOURCE[0]}"
+	exit 1
+fi
+
+unzip -p "$1" word/document.xml |\
+xslt2 "${0%/*}"/_toc-docx/toc-docx.xslt 
