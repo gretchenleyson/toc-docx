@@ -6,7 +6,7 @@ xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
 
 <xsl:variable name="whitespace" select="'&#09;&#10;&#13; '" />
 
-<xsl:output omit-xml-declaration="yes" method="text" indent="no"/>
+<xsl:output omit-xml-declaration="yes" method="text" indent="no" />
 <xsl:template match="/">
     <xsl:for-each select="//w:pStyle[starts-with(@w:val,'Heading')]">
 
