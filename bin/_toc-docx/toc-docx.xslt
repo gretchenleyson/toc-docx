@@ -2,11 +2,9 @@
 <xsl:stylesheet version="2.0"
 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-xmlns:fn="http://www.w3.org/2005/xpath-functions"
 xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"> 
 
 <xsl:variable name="whitespace" select="'&#09;&#10;&#13; '" />
-<xsl:variable name="prefix" select="'####################'" />
 
 <xsl:output omit-xml-declaration="yes" method="text" indent="no" />
 <xsl:template match="/">
@@ -23,7 +21,7 @@ xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
           <xsl:value-of select="." />
         </xsl:for-each>
       </xsl:variable>
-      <xsl:value-of select="concat(substring($prefix, 1, fn:number($headingNum)), ' ', $heading)" />
+      <xsl:value-of select="concat('H', $headingNum, ' ', $heading)" />
       <!-- Print newline -->
       <xsl:text>&#xa;</xsl:text>
     </xsl:if>
