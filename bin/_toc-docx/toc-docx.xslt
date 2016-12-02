@@ -2,9 +2,11 @@
 <xsl:stylesheet version="2.0"
 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+xmlns:fn="http://www.w3.org/2005/xpath-functions"
 xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"> 
 
 <xsl:variable name="whitespace" select="'&#09;&#10;&#13; '" />
+<xsl:variable name="prefix" select="'####################'" />
 
 <xsl:output omit-xml-declaration="yes" method="text" indent="no" />
 <xsl:template match="/">
@@ -15,37 +17,20 @@ xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
       </xsl:call-template>
     </xsl:variable>
     <xsl:if test="$headingText != ''">
-      <xsl:variable name="headerPrefix">
-        <xsl:call-template name="loopPrefix">
-          <xsl:with-param name="headingNum"><xsl:value-of select="substring-after(@w:val,'Heading')" /></xsl:with-param>
-        </xsl:call-template>
-      </xsl:variable>
+      <xsl:variable name="headingNum" select="substring-after(@w:val,'Heading')" />
       <xsl:variable name="heading">
         <xsl:for-each select="ancestor::w:p/w:r/w:t">
           <xsl:value-of select="." />
         </xsl:for-each>
       </xsl:variable>
-      <xsl:value-of select="concat($headerPrefix, ' ', $heading)" />
+      <xsl:value-of select="concat(substring($prefix, 1, fn:number($headingNum)), ' ', $heading)" />
       <!-- Print newline -->
       <xsl:text>&#xa;</xsl:text>
     </xsl:if>
   </xsl:for-each>
 </xsl:template>
 
-<!-- Print prefix (#) according to heading level (ATX style header)-->
-<xsl:template name="loopPrefix">
-  <xsl:param name="headingNum"></xsl:param>
-  <xsl:if test="$headingNum &gt; 0">
-    <xsl:text>#</xsl:text>
-    <xsl:call-template name="loopPrefix">
-      <xsl:with-param name="headingNum">
-      <xsl:number value="number($headingNum)-1" />
-      </xsl:with-param>
-    </xsl:call-template>
-  </xsl:if>
-</xsl:template>
-
-<!-- Remove trailing spaces -->
+<!-- Remove trailing spaces so that empty headings are not printed -->
 <xsl:template name="trim">
   <xsl:param name="string" />
   <xsl:param name="trim" select="$whitespace" />
