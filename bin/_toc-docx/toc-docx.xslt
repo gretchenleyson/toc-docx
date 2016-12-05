@@ -9,21 +9,17 @@ xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
 <xsl:output omit-xml-declaration="yes" method="text" indent="no" />
 <xsl:template match="/">
   <xsl:for-each select="//w:pStyle[starts-with(@w:val,'Heading')]">
-
     <xsl:variable name="headingText">
       <xsl:call-template name="trim">
         <xsl:with-param name="string"><xsl:value-of select="ancestor::w:p/w:r/w:t" /></xsl:with-param>	
       </xsl:call-template>
     </xsl:variable>
-
     <xsl:if test="$headingText != ''">
-
       <xsl:variable name="headerPrefix">
         <xsl:call-template name="loopPrefix">
           <xsl:with-param name="headingNum"><xsl:value-of select="substring-after(@w:val,'Heading')" /></xsl:with-param>
         </xsl:call-template>
       </xsl:variable>
-
       <xsl:variable name="heading">
         <xsl:for-each select="ancestor::w:p/w:r/w:t">
           <xsl:value-of select="." />
@@ -32,7 +28,6 @@ xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
       <xsl:value-of select="concat($headerPrefix, ' ', $heading)" />
       <!-- Print newline -->
       <xsl:text>&#xa;</xsl:text>
-
     </xsl:if>
   </xsl:for-each>
 </xsl:template>
