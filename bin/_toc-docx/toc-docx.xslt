@@ -17,37 +17,18 @@ xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
     </xsl:variable>
 
     <xsl:if test="$headingText != ''">
-
-      <xsl:variable name="headerPrefix">
-        <xsl:call-template name="loopPrefix">
-          <xsl:with-param name="headingNum"><xsl:value-of select="substring-after(@w:val,'Heading')" /></xsl:with-param>
-        </xsl:call-template>
-      </xsl:variable>
-
+      <xsl:variable name="headingNum" select="substring-after(@w:val,'Heading')" />
       <xsl:variable name="heading">
         <xsl:for-each select="ancestor::w:p/w:r/w:t">
           <xsl:value-of select="." />
         </xsl:for-each>
       </xsl:variable>
-      <xsl:value-of select="concat($headerPrefix, ' ', $heading)" />
+      <xsl:value-of select="concat('H', $headingNum, ' ', $heading)" />
       <!-- Print newline -->
       <xsl:text>&#xa;</xsl:text>
 
     </xsl:if>
   </xsl:for-each>
-</xsl:template>
-
-<!-- Print prefix (#) according to heading level (ATX style header)-->
-<xsl:template name="loopPrefix">
-  <xsl:param name="headingNum"></xsl:param>
-  <xsl:if test="$headingNum &gt; 0">
-    <xsl:text>#</xsl:text>
-    <xsl:call-template name="loopPrefix">
-      <xsl:with-param name="headingNum">
-      <xsl:number value="number($headingNum)-1" />
-      </xsl:with-param>
-    </xsl:call-template>
-  </xsl:if>
 </xsl:template>
 
 <!-- Remove trailing spaces -->
